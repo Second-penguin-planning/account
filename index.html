@@ -2,139 +2,128 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>会計入力</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>売上入力</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: sans-serif;
       margin: 0;
-      background: #f6f7f9;
-      color: #222;
+      padding: 16px;
+      background: #f5f5f5;
     }
     .container {
-      max-width: 640px;
+      max-width: 520px;
       margin: 0 auto;
-      padding: 16px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
     h1 {
-      font-size: 22px;
-      margin: 8px 0 16px;
+      font-size: 24px;
+      margin-bottom: 20px;
     }
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    .field {
+      margin-bottom: 16px;
     }
     label {
       display: block;
-      font-size: 14px;
-      margin: 12px 0 6px;
-      font-weight: 600;
+      margin-bottom: 6px;
+      font-weight: bold;
     }
-    input, select, textarea, button {
+    input, select, textarea {
       width: 100%;
       box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
       font-size: 16px;
-      border-radius: 12px;
-      border: 1px solid #d0d7de;
-      padding: 14px;
       background: #fff;
     }
     textarea {
-      min-height: 88px;
+      min-height: 90px;
       resize: vertical;
     }
     button {
-      margin-top: 16px;
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
       border: none;
-      background: #0b74ff;
+      border-radius: 8px;
+      background: #2563eb;
       color: white;
-      font-weight: 700;
-      cursor: pointer;
+      font-weight: bold;
     }
     button:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
+      background: #93c5fd;
     }
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .message {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      display: none;
-      white-space: pre-wrap;
+    #message {
+      margin-top: 16px;
+      font-weight: bold;
     }
     .success {
-      background: #e8f7ee;
-      color: #116b3a;
-      border: 1px solid #bfe7cd;
+      color: green;
     }
     .error {
-      background: #fdecec;
-      color: #a12222;
-      border: 1px solid #f3bcbc;
+      color: red;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>会計入力</h1>
+    <h1>売上入力</h1>
 
-    <div class="card">
-      <form id="salesForm">
+    <form id="salesForm">
+      <div class="field">
         <label for="date">日付</label>
         <input type="date" id="date" name="date" required />
+      </div>
 
+      <div class="field">
         <label for="client_name">取引先名</label>
         <input type="text" id="client_name" name="client_name" required />
+      </div>
 
+      <div class="field">
         <label for="description">内容</label>
-        <input type="text" id="description" name="description" required />
+        <textarea id="description" name="description" required></textarea>
+      </div>
 
-        <div class="row">
-          <div>
-            <label for="amount">金額</label>
-            <input type="number" id="amount" name="amount" inputmode="numeric" required />
-          </div>
-          <div>
-            <label for="payment_method">支払方法</label>
-            <select id="payment_method" name="payment_method" required>
-              <option value="">選択してください</option>
-              <option value="cash">現金</option>
-              <option value="bank">振込</option>
-              <option value="card">カード</option>
-              <option value="other">その他</option>
-            </select>
-          </div>
-        </div>
+      <div class="field">
+        <label for="amount">金額</label>
+        <input type="number" id="amount" name="amount" required />
+      </div>
 
-        <div class="row">
-          <div>
-            <label for="payment_status">入金状況</label>
-            <select id="payment_status" name="payment_status" required>
-              <option value="">選択してください</option>
-              <option value="paid">入金済み</option>
-              <option value="unpaid">未入金</option>
-              <option value="partial">一部入金</option>
-            </select>
-          </div>
-          <div></div>
-        </div>
+      <div class="field">
+        <label for="payment_method">支払方法</label>
+        <select id="payment_method" name="payment_method" required>
+          <option value="">選択してください</option>
+          <option value="現金">現金</option>
+          <option value="振込">振込</option>
+          <option value="カード">カード</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
 
+      <div class="field">
+        <label for="payment_status">入金状況</label>
+        <select id="payment_status" name="payment_status" required>
+          <option value="">選択してください</option>
+          <option value="入金済み">入金済み</option>
+          <option value="未入金">未入金</option>
+          <option value="一部入金">一部入金</option>
+        </select>
+      </div>
+
+      <div class="field">
         <label for="memo">メモ</label>
-        <textarea id="memo" name="memo" placeholder="任意"></textarea>
+        <textarea id="memo" name="memo"></textarea>
+      </div>
 
-        <button type="submit" id="submitBtn">保存する</button>
-      </form>
+      <button type="submit" id="submitBtn">登録</button>
+    </form>
 
-      <div id="message" class="message"></div>
-    </div>
+    <div id="message"></div>
   </div>
 
   <script>
@@ -144,22 +133,16 @@
     const message = document.getElementById("message");
     const submitBtn = document.getElementById("submitBtn");
 
-    // 今日の日付を初期値にする
-    document.getElementById("date").value = new Date().toISOString().slice(0, 10);
-
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = `message ${type}`;
-      message.style.display = "block";
-    }
-
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      message.style.display = "none";
+
+      message.textContent = "";
+      message.className = "";
+
       submitBtn.disabled = true;
       submitBtn.textContent = "送信中...";
 
-      const data = {
+      const formData = {
         date: document.getElementById("date").value,
         client_name: document.getElementById("client_name").value.trim(),
         description: document.getElementById("description").value.trim(),
@@ -173,25 +156,26 @@
         const res = await fetch(API_URL, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(formData)
         });
 
-        const result = await res.json();
+        const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(result.error || "送信に失敗しました");
+          throw new Error(data.error || "登録に失敗しました");
         }
 
-        showMessage("保存しました。", "success");
+        message.textContent = "登録が完了しました";
+        message.className = "success";
         form.reset();
-        document.getElementById("date").value = new Date().toISOString().slice(0, 10);
       } catch (err) {
-        showMessage("エラー: " + err.message, "error");
+        message.textContent = "エラー: " + err.message;
+        message.className = "error";
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = "保存する";
+        submitBtn.textContent = "登録";
       }
     });
   </script>
