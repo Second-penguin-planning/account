@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>売上入力</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f6f7fb;
+      margin: 0;
+      padding: 16px;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    input, select, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 6px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #fff;
+    }
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button:disabled {
+      background: #93c5fd;
+    }
+    .message {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>売上入力</h1>
+
+    <form id="salesForm">
+      <label for="sale_id">売上ID</label>
+      <input type="text" id="sale_id" name="sale_id" placeholder="自動でもOK" />
+
+      <label for="date">日付</label>
+      <input type="date" id="date" name="date" required />
+
+      <label for="client_name">取引先名</label>
+      <input type="text" id="client_name" name="client_name" required />
+
+      <label for="description">内容</label>
+      <input type="text" id="description" name="description" required />
+
+      <label for="amount">金額</label>
+      <input type="number" id="amount" name="amount" required />
+
+      <label for="payment_method">支払方法</label>
+      <select id="payment_method" name="payment_method">
+        <option value="現金">現金</option>
+        <option value="振込">振込</option>
+        <option value="クレジット">クレジット</option>
+        <option value="その他">その他</option>
+      </select>
+
+      <label for="payment_status">入金状況</label>
+      <select id="payment_status" name="payment_status">
+        <option value="未入金">未入金</option>
+        <option value="入金済み">入金済み</option>
+      </select>
+
+      <label for="memo">メモ</label>
+      <textarea id="memo" name="memo"></textarea>
+
+      <button type="submit" id="submitBtn">保存する</button>
+    </form>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("salesForm");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submitBtn");
+
+    // あとで自分のWorker URLに変える
+    const API_URL = "https://YOUR-WORKER-URL.workers.dev/api/sales";
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      message.textContent = "";
+      message.className = "message";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "送信中...";
+
+      const data = {
+        sale_id: document.getElementById("sale_id").value,
+        date: document.getElementById("date").value,
+        client_name: document.getElementById("client_name").value,
+        description: document.getElementById("description").value,
+        amount: document.getElementById("amount").value,
+        payment_method: document.getElementById("payment_method").value,
+        payment_status: document.getElementById("payment_status").value,
+        memo: document.getElementById("memo").value,
+      };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          message.textContent = "保存しました。";
+          message.classList.add("success");
+          form.reset();
+        } else {
+          throw new Error(result.error || "保存に失敗しました");
+        }
+      } catch (error) {
+        message.textContent = "エラー: " + error.message;
+        message.classList.add("error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "保存する";
+      }
+    });
+  </script>
+</body>
+</html>
